@@ -1,3 +1,7 @@
+/**
+ * www.arduinoNa.com
+ * จากบทความ [โปรเจค] ใช้ esp32-cam เป็นกล้องวงจรปิดแบบพกพา
+ */
 
 #include "esp_http_server.h"
 #include "esp_timer.h"
@@ -323,7 +327,7 @@ static esp_err_t index_handler(httpd_req_t *req) {
   return httpd_resp_send(req, &page[0], strlen(&page[0]));
 }
 
-//สั่งให้รถเดินหน้า
+//สั่งแพนกล้องกลาง
 static esp_err_t normal_pan_handler(httpd_req_t *req) {
   svPanPWM = 1.5;
   Serial.println("Go");
@@ -331,6 +335,7 @@ static esp_err_t normal_pan_handler(httpd_req_t *req) {
   return httpd_resp_send(req, "OK", 2);
 }
 
+//สั่งแพนกล้องซ้าย
 static esp_err_t left_pan_handler(httpd_req_t *req) {
   svPanPWM = 2.5;
   Serial.println("Left");
@@ -338,7 +343,7 @@ static esp_err_t left_pan_handler(httpd_req_t *req) {
   return httpd_resp_send(req, "OK", 2);
 }
 
-//สั่งให้รถหมุนตามเข็ม
+//สั่งแพนกล้องขวา
 static esp_err_t right_pan_handler(httpd_req_t *req) {
   svPanPWM = 0.5;
   Serial.println("Right");

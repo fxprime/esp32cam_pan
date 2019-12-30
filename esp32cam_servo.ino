@@ -108,24 +108,10 @@ void setup() {
   //drop down frame size for higher initial frame rate
   sensor_t * s = esp_camera_sensor_get();
   s->set_framesize(s, FRAMESIZE_CIF);
-
-  //ต่อ WiFi 
-  wifi_country_t contry = {
-          .cc = "TH",
-          .schan = 1,
-          .nchan = 11,
-          .max_tx_power = 28,
-          .policy = WIFI_COUNTRY_POLICY_MANUAL
-  };
-  esp_wifi_set_country(&contry);
-  esp_wifi_set_bandwidth(ESP_IF_WIFI_STA, WIFI_BW_HT20);
-
-    
   esp_wifi_set_ps(WIFI_PS_NONE);
+
+  //ตั้งค่า Static IP และ ต่อ WiFi 
   WiFi.config(local_IP, gateway, subnet);
-
-
-  
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -143,7 +129,7 @@ void setup() {
   WiFiAddr = WiFi.localIP().toString();
   Serial.println("' to connect");
 
-
+  //สั่งให้ไฟกระพริบให้รู้ว่ากล้องพร้อมใช้งาน
   for(int i=0; i<17; i++) {
     digitalWrite(gpLed, i%2);
     delay(100);
@@ -152,6 +138,7 @@ void setup() {
 
 }
 
+//แปลง pwm เป็น Dutycycle 
 int pwmToDutycycleSmooth(float pwm) {
   static float pwm_smooth = pwm;
   const float speed = 0.5; // 2 ms = 180 deg/s, 0.5ms = 45deg/s in 1 sec
@@ -170,6 +157,5 @@ int pwmToDutycycleSmooth(float pwm) {
 }
 void loop() {
   ledcWrite(4, pwmToDutycycleSmooth(svPanPWM));
-//  Serial.println((temprature_sens_read() - 32) / 1.8);
   delay(10);
 }
